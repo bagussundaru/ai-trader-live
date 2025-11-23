@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Enhanced AI Trader v2.0 - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        .status-live {
+            background: #ff4444;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .metric-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .metric-value {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .positive {
+            color: #22c55e !important;
+        }
+
+        .negative {
+            color: #ef4444 !important;
+        }
+
+        .neutral {
+            color: #f59e0b !important;
+        }
+
+        .analysis-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .analysis-box h3 {
+            color: #667eea;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .signal-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .signal-buy {
+            background: #22c55e;
+            box-shadow: 0 0 10px #22c55e;
+        }
+
+        .signal-sell {
+            background: #ef4444;
+            box-shadow: 0 0 10px #ef4444;
+        }
+
+        .signal-hold {
+            background: #f59e0b;
+            box-shadow: 0 0 10px #f59e0b;
+        }
+
+        .logs-container {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            max-height: 400px;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 3px solid transparent;
+        }
+
+        .log-info {
+            border-left-color: #3b82f6;
+        }
+
+        .log-success {
+            border-left-color: #22c55e;
+        }
+
+        .log-warning {
+            border-left-color: #f59e0b;
+        }
+
+        .log-error {
+            border-left-color: #ef4444;
+        }
+
+        .refresh-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: all 0.3s;
+        }
+
+        .refresh-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .timestamp {
+            color: #888;
+            font-size: 0.85em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+
+        .factor-score {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .factor-name {
+            flex: 0 0 150px;
+            font-weight: 600;
+        }
+
+        .factor-bar {
+            flex: 1;
+            height: 20px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 10px;
+        }
+
+        .factor-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #22c55e, #10b981);
+            border-radius: 10px;
+        }
+
+        .factor-value {
+            flex: 0 0 60px;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .auto-refresh {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .auto-refresh label {
+            margin-right: 10px;
+            font-weight: 600;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #667eea;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🚀 Enhanced AI Trader v2.0</h1>
+            <p style="color: #666; margin: 10px 0;">Institutional-Grade Multi-Factor Analysis</p>
+            <span class="status-badge status-live">🔴 LIVE TRADING</span>
+            <div style="margin-top: 15px;">
+                <span class="timestamp" id="lastUpdate">Last updated: --:--:--</span>
+            </div>
+        </div>
+
+        <!-- Auto Refresh Toggle -->
+        <div class="auto-refresh">
+            <label>Auto Refresh (30s):</label>
+            <label class="switch">
+                <input type="checkbox" id="autoRefresh" checked>
+                <span class="slider"></span>
+            </label>
+            <button class="refresh-btn" onclick="refreshData()">🔄 Refresh Now</button>
+        </div>
+
+        <!-- Key Metrics Grid -->
+        <div class="grid">
+            <!-- Account Info -->
+            <div class="card">
+                <h2>💰 Account Info</h2>
+                <div class="metric">
+                    <span class="metric-label">Balance</span>
+                    <span class="metric-value" id="balance">$0.00</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Open Positions</span>
+                    <span class="metric-value" id="positions">0</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Total P/L</span>
+                    <span class="metric-value positive" id="pnl">+$0.00</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Leverage</span>
+                    <span class="metric-value" id="leverage">5x</span>
+                </div>
+            </div>
+
+            <!-- Current Market -->
+            <div class="card">
+                <h2>📊 Current Market</h2>
+                <div class="metric">
+                    <span class="metric-label">Symbol</span>
+                    <span class="metric-value">ETHUSDT</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Price</span>
+                    <span class="metric-value" id="price">$0.00</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">24h Change</span>
+                    <span class="metric-value positive" id="change">+0.00%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Volume</span>
+                    <span class="metric-value" id="volume">0</span>
+                </div>
+            </div>
+
+            <!-- Current Signal -->
+            <div class="card">
+                <h2>🎯 Current Signal</h2>
+                <div class="metric">
+                    <span class="metric-label">Action</span>
+                    <span class="metric-value">
+                        <span class="signal-indicator signal-hold"></span>
+                        <span id="signal">ANALYZING...</span>
+                    </span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Confidence</span>
+                    <span class="metric-value" id="confidence">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="confidenceBar" style="width: 0%"></div>
+                </div>
+                <div style="margin-top: 10px; padding: 10px; background: #f0f9ff; border-radius: 8px; text-align: center; font-size: 0.9em;">
+                    <strong>Threshold: 70%</strong> - Trades only execute above this
+                </div>
+            </div>
+        </div>
+
+        <!-- Market Regime -->
+        <div class="card">
+            <h2>🌊 Market Regime Detection</h2>
+            <div class="analysis-box">
+                <h3>Current State: <span id="regimeState">ANALYZING...</span></h3>
+                <div class="metric">
+                    <span class="metric-label">Confidence</span>
+                    <span class="metric-value" id="regimeConfidence">0%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Action</span>
+                    <span class="metric-value" id="regimeAction">WAIT</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Risk Multiplier</span>
+                    <span class="metric-value" id="regimeMultiplier">1.0x</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Multi-Factor Analysis -->
+        <div class="card">
+            <h2>📈 Multi-Factor Analysis (5 Factors)</h2>
+            <div class="factor-score">
+                <span class="factor-name">Technical (25%)</span>
+                <div class="factor-bar">
+                    <div class="factor-fill" id="techBar" style="width: 0%"></div>
+                </div>
+                <span class="factor-value" id="techScore">0/100</span>
+            </div>
+            <div class="factor-score">
+                <span class="factor-name">Order Flow (25%)</span>
+                <div class="factor-bar">
+                    <div class="factor-fill" id="flowBar" style="width: 0%"></div>
+                </div>
+                <span class="factor-value" id="flowScore">0/100</span>
+            </div>
+            <div class="factor-score">
+                <span class="factor-name">Regime (20%)</span>
+                <div class="factor-bar">
+                    <div class="factor-fill" id="regimeBar" style="width: 0%"></div>
+                </div>
+                <span class="factor-value" id="regimeScore">0/100</span>
+            </div>
+            <div class="factor-score">
+                <span class="factor-name">Macro (15%)</span>
+                <div class="factor-bar">
+                    <div class="factor-fill" id="macroBar" style="width: 0%"></div>
+                </div>
+                <span class="factor-value" id="macroScore">0/100</span>
+            </div>
+            <div class="factor-score">
+                <span class="factor-name">Sentiment (15%)</span>
+                <div class="factor-bar">
+                    <div class="factor-fill" id="sentimentBar" style="width: 0%"></div>
+                </div>
+                <span class="factor-value" id="sentimentScore">0/100</span>
+            </div>
+            <div style="margin-top: 20px; padding: 15px; background: #f0fdf4; border-radius: 8px; border-left: 4px solid #22c55e;">
+                <strong>Total Weighted Score:</strong> <span id="totalScore" style="font-size: 1.3em; color: #22c55e;">0/100</span>
+            </div>
+        </div>
+
+        <!-- Recent Logs -->
+        <div class="card">
+            <h2>📝 Recent Activity Logs</h2>
+            <div class="logs-container" id="logsContainer">
+                <div class="log-entry log-info">🔄 Initializing dashboard...</div>
+                <div class="log-entry log-info">📡 Waiting for data from Railway...</div>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="card">
+            <h2>📖 How to Use This Dashboard</h2>
+            <ol style="line-height: 2;">
+                <li><strong>Auto-refresh is enabled</strong> - Dashboard updates every 30 seconds automatically</li>
+                <li><strong>Check Railway logs</strong> for detailed analysis output</li>
+                <li><strong>Monitor Confidence</strong> - Trades only execute when ≥70%</li>
+                <li><strong>Multi-Factor Analysis</strong> shows breakdown of AI decision</li>
+                <li><strong>Green = Bullish</strong>, Red = Bearish, Yellow = Neutral</li>
+            </ol>
+            <div style="margin-top: 15px; padding: 15px; background: #fef3c7; border-radius: 8px;">
+                <strong>⚠️ Note:</strong> This dashboard currently shows mock data.
+                To connect real data, you need to add API endpoints to your bot or use Railway logs for real-time monitoring.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock data for demonstration
+        function generateMockData() {
+            return {
+                balance: (Math.random() * 1000 + 500).toFixed(2),
+                positions: Math.floor(Math.random() * 3),
+                pnl: (Math.random() * 100 - 50).toFixed(2),
+                price: (3200 + Math.random() * 100).toFixed(2),
+                change: (Math.random() * 10 - 5).toFixed(2),
+                volume: (Math.random() * 10000).toFixed(0),
+                signal: ['BUY', 'SELL', 'HOLD'][Math.floor(Math.random() * 3)],
+                confidence: Math.floor(Math.random() * 40 + 50),
+                regime: {
+                    state: ['TRENDING', 'RANGING', 'CHOPPY', 'VOLATILE'][Math.floor(Math.random() * 4)],
+                    confidence: Math.floor(Math.random() * 30 + 60),
+                    action: ['FAVORABLE_FOR_LONGS', 'FAVORABLE_FOR_SHORTS', 'AVOID_TRADING'][Math.floor(Math.random() * 3)],
+                    multiplier: (Math.random() * 0.4 + 0.8).toFixed(1)
+                },
+                factors: {
+                    technical: Math.floor(Math.random() * 40 + 50),
+                    orderFlow: Math.floor(Math.random() * 40 + 40),
+                    regime: Math.floor(Math.random() * 30 + 60),
+                    macro: Math.floor(Math.random() * 50 + 30),
+                    sentiment: Math.floor(Math.random() * 40 + 50)
+                }
+            };
+        }
+
+        function refreshData() {
+            const data = generateMockData();
+
+            // Update account info
+            document.getElementById('balance').textContent = '$' + data.balance;
+            document.getElementById('positions').textContent = data.positions;
+            const pnlEl = document.getElementById('pnl');
+            pnlEl.textContent = (data.pnl >= 0 ? '+' : '') + '$' + data.pnl;
+            pnlEl.className = 'metric-value ' + (data.pnl >= 0 ? 'positive' : 'negative');
+
+            // Update market
+            document.getElementById('price').textContent = '$' + data.price;
+            const changeEl = document.getElementById('change');
+            changeEl.textContent = (data.change >= 0 ? '+' : '') + data.change + '%';
+            changeEl.className = 'metric-value ' + (data.change >= 0 ? 'positive' : 'negative');
+            document.getElementById('volume').textContent = data.volume;
+
+            // Update signal
+            document.getElementById('signal').textContent = data.signal;
+            document.getElementById('confidence').textContent = data.confidence + '%';
+            document.getElementById('confidenceBar').style.width = data.confidence + '%';
+
+            // Update regime
+            document.getElementById('regimeState').textContent = data.regime.state;
+            document.getElementById('regimeConfidence').textContent = data.regime.confidence + '%';
+            document.getElementById('regimeAction').textContent = data.regime.action;
+            document.getElementById('regimeMultiplier').textContent = data.regime.multiplier + 'x';
+
+            // Update factors
+            updateFactor('tech', data.factors.technical);
+            updateFactor('flow', data.factors.orderFlow);
+            updateFactor('regime', data.factors.regime);
+            updateFactor('macro', data.factors.macro);
+            updateFactor('sentiment', data.factors.sentiment);
+
+            // Calculate total
+            const total = Math.round(
+                data.factors.technical * 0.25 +
+                data.factors.orderFlow * 0.25 +
+                data.factors.regime * 0.20 +
+                data.factors.macro * 0.15 +
+                data.factors.sentiment * 0.15
+            );
+            document.getElementById('totalScore').textContent = total + '/100';
+
+            // Update timestamp
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent =
+                'Last updated: ' + now.toLocaleTimeString();
+
+            // Add log entry
+            addLog('info', `✅ Data refreshed - Signal: ${data.signal}, Confidence: ${data.confidence}%`);
+        }
+
+        function updateFactor(name, score) {
+            document.getElementById(name + 'Bar').style.width = score + '%';
+            document.getElementById(name + 'Score').textContent = score + '/100';
+        }
+
+        function addLog(type, message) {
+            const logsContainer = document.getElementById('logsContainer');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${type}`;
+            const timestamp = new Date().toLocaleTimeString();
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            logsContainer.insertBefore(logEntry, logsContainer.firstChild);
+
+            // Keep only last 20 logs
+            while (logsContainer.children.length > 20) {
+                logsContainer.removeChild(logsContainer.lastChild);
+            }
+        }
+
+        // Auto-refresh functionality
+        let autoRefreshInterval;
+
+        function toggleAutoRefresh() {
+            const checkbox = document.getElementById('autoRefresh');
+            if (checkbox.checked) {
+                autoRefreshInterval = setInterval(refreshData, 30000); // 30 seconds
+                addLog('success', '🔄 Auto-refresh enabled (30s interval)');
+            } else {
+                clearInterval(autoRefreshInterval);
+                addLog('warning', '⏸️ Auto-refresh disabled');
+            }
+        }
+
+        document.getElementById('autoRefresh').addEventListener('change', toggleAutoRefresh);
+
+        // Initialize
+        refreshData();
+        toggleAutoRefresh();
+        addLog('success', '🚀 Dashboard initialized successfully');
+        addLog('info', '📊 Displaying mock data - Connect to Railway for real data');
+    </script>
+</body>
+</html>

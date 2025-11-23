@@ -7,6 +7,7 @@ const OrderFlowEngine = require('./engines/OrderFlowEngine');
 const MacroFundamentalEngine = require('./engines/MacroFundamentalEngine');
 const SentimentOnChainEngine = require('./engines/SentimentOnChainEngine');
 const PerformanceTracker = require('./trackers/PerformanceTracker');
+const ApiServer = require('./api/ApiServer');
 const config = require('./config/config');
 
 /**
@@ -54,6 +55,9 @@ class EnhancedBlaxelAITrader {
     // Initialize performance tracker
     this.performanceTracker = new PerformanceTracker();
 
+    // Initialize API server for dashboard
+    this.apiServer = new ApiServer(this);
+
     // Connect components
     this.strategyEngine.setDataEngine(this.dataEngine);
 
@@ -61,6 +65,11 @@ class EnhancedBlaxelAITrader {
     this.enhanceStrategyEngine();
 
     this.setupEventHandlers();
+
+    // Track data for dashboard
+    this.lastSignal = null;
+    this.lastAnalysis = null;
+    this.recentLogs = [];
   }
 
   /**
@@ -294,6 +303,10 @@ class EnhancedBlaxelAITrader {
 
       this.isInitialized = true;
       console.log('\n[Enhanced] ✅ All systems initialized and ready!\n');
+
+      // Start API server for dashboard
+      console.log('[Enhanced] 🌐 Starting API server for dashboard...');
+      this.apiServer.start();
 
     } catch (error) {
       console.error('[Enhanced] ❌ Initialization error:', error.message);
