@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tree:*)",
+      "Bash(node scripts/check-account.js:*)",
+      "Bash(npm install:*)",
+      "Bash(timeout 60 node:*)",
+      "Bash(node:*)",
+      "Bash(ping:*)",
+      "Bash(nslookup:*)",
+      "Bash(curl:*)",
+      "Bash(tracert:*)",
+      "Bash(blaxel:*)",
+      "Bash(npm search:*)",
+      "Bash(npm info:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

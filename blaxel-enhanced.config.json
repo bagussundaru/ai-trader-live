@@ -1,0 +1,101 @@
+{
+  "name": "blaxel-ai-trader-enhanced",
+  "version": "2.0.0",
+  "description": "Enhanced AI Trading Bot with Multi-Factor Institutional Analysis",
+  "agent": {
+    "type": "serverless",
+    "runtime": "nodejs18",
+    "handler": "blaxel-agent-enhanced.handler",
+    "memory": 1024,
+    "timeout": 600,
+    "env": {
+      "NODE_ENV": "production"
+    }
+  },
+  "endpoints": [
+    {
+      "path": "/initialize",
+      "method": "POST",
+      "description": "Initialize the enhanced trading agent with all analysis engines"
+    },
+    {
+      "path": "/start",
+      "method": "POST",
+      "description": "Start automated multi-factor trading"
+    },
+    {
+      "path": "/stop",
+      "method": "POST",
+      "description": "Stop automated trading"
+    },
+    {
+      "path": "/status",
+      "method": "GET",
+      "description": "Get comprehensive status including all factor analysis"
+    },
+    {
+      "path": "/trade",
+      "method": "POST",
+      "description": "Execute manual trade with enhanced risk management",
+      "body": {
+        "action": "Buy or Sell",
+        "confidence": "0.0-1.0 (optional, default 0.8)"
+      }
+    },
+    {
+      "path": "/close-all",
+      "method": "POST",
+      "description": "Emergency close all open positions"
+    },
+    {
+      "path": "/regime",
+      "method": "GET",
+      "description": "Get current market regime analysis (trending/ranging/choppy/volatile)"
+    },
+    {
+      "path": "/order-flow",
+      "method": "GET",
+      "description": "Get order flow analysis (CVD, OI, Funding Rate, Order Book)"
+    },
+    {
+      "path": "/macro",
+      "method": "GET",
+      "description": "Get macro fundamental analysis (DXY, US10Y, ETF flows)"
+    },
+    {
+      "path": "/sentiment",
+      "method": "GET",
+      "description": "Get sentiment & on-chain analysis (Fear/Greed, NUPL, MVRV)"
+    },
+    {
+      "path": "/health",
+      "method": "GET",
+      "description": "Health check endpoint with feature status"
+    }
+  ],
+  "observability": {
+    "logging": true,
+    "metrics": true,
+    "traces": true,
+    "customMetrics": [
+      "regime_changes",
+      "order_flow_signals",
+      "macro_signals",
+      "sentiment_shifts",
+      "risk_adjusted_trades"
+    ]
+  },
+  "network": {
+    "region": "auto",
+    "lowLatency": true
+  },
+  "features": {
+    "multiFactorAnalysis": true,
+    "regimeDetection": true,
+    "orderFlowTracking": true,
+    "macroFundamentals": true,
+    "sentimentAnalysis": true,
+    "dynamicRiskManagement": true,
+    "atrBasedStops": true
+  }
+}

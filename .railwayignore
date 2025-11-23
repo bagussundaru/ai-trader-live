@@ -1,0 +1,9 @@
+node_modules/
+.git/
+*.log
+.env.testnet
+test-*.js
+scripts/
+docs/
+*.md
+!README.md

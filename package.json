@@ -1,0 +1,41 @@
+{
+  "name": "blaxel-ai-trader",
+  "version": "2.0.0",
+  "description": "AI Trading Bot for Bybit with Multi-Factor Institutional-Grade Analysis",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "start:enhanced": "node src/index-enhanced.js",
+    "start:live": "node start-live.js",
+    "test": "node test-local.js",
+    "test:enhanced": "node test-enhanced.js",
+    "dev": "node --watch src/index.js",
+    "dev:enhanced": "node --watch src/index-enhanced.js",
+    "check": "node scripts/check-account.js",
+    "compare": "node scripts/compare-versions.js",
+    "go-live": "node scripts/go-live.js",
+    "switch-to-testnet": "node scripts/switch-to-testnet.js",
+    "deploy": "blaxel deploy",
+    "deploy:enhanced": "blaxel deploy --config blaxel-enhanced.config.json",
+    "logs": "blaxel logs --tail 100",
+    "status": "blaxel status"
+  },
+  "keywords": [
+    "trading",
+    "ai",
+    "bybit",
+    "crypto"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@blaxel/core": "^0.2.50",
+    "axios": "^1.13.2",
+    "bybit-api": "^3.10.0",
+    "dotenv": "^16.6.1",
+    "ws": "^8.16.0"
+  }
+}

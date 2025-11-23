@@ -1,0 +1,65 @@
+{
+  "name": "blaxel-ai-trader",
+  "version": "1.0.0",
+  "description": "AI Trading Bot for Bybit with professional risk management",
+  "agent": {
+    "type": "serverless",
+    "runtime": "nodejs18",
+    "handler": "blaxel-agent.handler",
+    "memory": 512,
+    "timeout": 300,
+    "env": {
+      "NODE_ENV": "production"
+    }
+  },
+  "endpoints": [
+    {
+      "path": "/initialize",
+      "method": "POST",
+      "description": "Initialize the trading agent"
+    },
+    {
+      "path": "/start",
+      "method": "POST",
+      "description": "Start automated trading"
+    },
+    {
+      "path": "/stop",
+      "method": "POST",
+      "description": "Stop automated trading"
+    },
+    {
+      "path": "/status",
+      "method": "GET",
+      "description": "Get current trading status and metrics"
+    },
+    {
+      "path": "/trade",
+      "method": "POST",
+      "description": "Execute manual trade",
+      "body": {
+        "action": "Buy or Sell",
+        "confidence": "0.0-1.0"
+      }
+    },
+    {
+      "path": "/close-all",
+      "method": "POST",
+      "description": "Close all open positions"
+    },
+    {
+      "path": "/health",
+      "method": "GET",
+      "description": "Health check endpoint"
+    }
+  ],
+  "observability": {
+    "logging": true,
+    "metrics": true,
+    "traces": true
+  },
+  "network": {
+    "region": "auto",
+    "lowLatency": true
+  }
+}
